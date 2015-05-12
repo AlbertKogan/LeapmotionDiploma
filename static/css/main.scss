@@ -1,3 +1,12 @@
 .content {
     background-color: #bfbfbf;
 }
+
+.cursor {
+    display: inline-block;
+    position: absolute;
+    content: ' ';
+    width: 5px;
+    height: 5px;
+    background-color: grey;
+}

@@ -14,7 +14,8 @@ module.exports = function (grunt) {
         dirs: {
             src: STATIC_PATH,
             srcJs: path.join(STATIC_PATH, 'js/'),
-            srcCss: path.join(STATIC_PATH, 'css/')
+            srcCss: path.join(STATIC_PATH, 'css/'),
+            images: path.join(STATIC_PATH, 'images/')
         },
 
         sass: {
@@ -36,6 +37,23 @@ module.exports = function (grunt) {
                     modules: true,
                     reasons: true
                 }
+            }
+        },
+
+        imagemin: {
+            dynamic: {
+                options: {
+                    optimizationLevel: 5
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= dirs.images %>',
+                    src: [
+                        'jpg/*.jpg',
+                        'png/*.png'
+                    ],
+                    dest: '<%= dirs.images %>build/'
+                }]
             }
         },
 
@@ -84,6 +102,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'webpack',
         'sass',
+        'imagemin',
         'browserSync',
         'watch'
     ]);

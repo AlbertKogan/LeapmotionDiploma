@@ -8,12 +8,17 @@ module.exports = {
     context: STATIC_PATH,
     resolve: {
         alias: {
-            jquery: path.join(STATIC_PATH, 'js/lib/jquery.js')
+            jquery: path.join(STATIC_PATH, 'js/lib/jquery.js'),
+            three: path.join(STATIC_PATH, 'js/lib/three.min.js'),
+            threeMeshPhong: path.join(STATIC_PATH, 'js/lib/mesh_phong_material.js'),
+            canvasRenderer: path.join(STATIC_PATH, 'js/lib/canvas_renderer.js'),
+            projector: path.join(STATIC_PATH, 'js/lib/projector.js')
         }
     },
     entry: {
         app:'./js/main.js',
-        vendor: ['jquery', 'leapjs']
+        vendor: ['jquery', 'leapjs'],
+        compileThree: ['three', 'threeMeshPhong', 'canvasRenderer', 'projector']
     },
     output: {
         path: path.join(STATIC_PATH, 'js/build'),
@@ -21,10 +26,12 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
+        new webpack.optimize.CommonsChunkPlugin('compileThree', 'three.compile.js'),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            'window.jQuery': 'jquery'
+            'window.jQuery': 'jquery',
+            THREE: 'three'
         })
     ]
 };
