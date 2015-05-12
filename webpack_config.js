@@ -12,13 +12,25 @@ module.exports = {
             three: path.join(STATIC_PATH, 'js/lib/three.min.js'),
             threeMeshPhong: path.join(STATIC_PATH, 'js/lib/mesh_phong_material.js'),
             canvasRenderer: path.join(STATIC_PATH, 'js/lib/canvas_renderer.js'),
-            projector: path.join(STATIC_PATH, 'js/lib/projector.js')
+            projector: path.join(STATIC_PATH, 'js/lib/projector.js'),
+            riggedHand: path.join(STATIC_PATH, 'js/lib/rigged_hand.0.1.7.min.js'),
+            handHold: path.join(STATIC_PATH, 'js/lib/hand_hold.js'),
+            handEntry: path.join(STATIC_PATH, 'js/lib/hand_entry.js'),
+            versionCheck: path.join(STATIC_PATH, 'js/lib/version_check.js')
         }
     },
     entry: {
         app:'./js/main.js',
         vendor: ['jquery', 'leapjs'],
-        compileThree: ['three', 'threeMeshPhong', 'canvasRenderer', 'projector']
+        compileThree: [
+            'handHold',
+            'handEntry',
+            'versionCheck',
+            'three',
+            'threeMeshPhong',
+            'canvasRenderer',
+            'projector'
+        ]
     },
     output: {
         path: path.join(STATIC_PATH, 'js/build'),
@@ -31,7 +43,8 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
-            THREE: 'three'
+            THREE: 'three',
+            Leap: 'leapjs'
         })
     ]
 };
