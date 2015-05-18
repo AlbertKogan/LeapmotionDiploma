@@ -1,8 +1,9 @@
 define([
     'leapjs',
     'riggedHand',
-    './scene.js'
-], function (Leap, RiggedHand, Scene) {
+    './scene.js',
+    './earth.js'
+], function (Leap, RiggedHand, Scene, Earth) {
     'use strict';
 
     var controllerOptions = {
@@ -12,6 +13,8 @@ define([
         controller = new Leap.Controller(controllerOptions),
         $cursor = $('.js-cursor');
 
+
+    Scene.init(Earth);
 
     controller.on('frame', function (frame) {
         if (frame.valid && frame.gestures.length > 0) {
@@ -57,4 +60,5 @@ define([
 
     controller.use('riggedHand');
     controller.connect();
+
 });
