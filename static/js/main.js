@@ -1,9 +1,10 @@
 define([
     'leapjs',
     'riggedHand',
+    'handHold',
     './scene.js',
     './earth.js'
-], function (Leap, RiggedHand, Scene, Earth) {
+], function (Leap, RiggedHand, handHold, Scene, Earth) {
     'use strict';
 
     var controllerOptions = {
@@ -14,6 +15,7 @@ define([
         $cursor = $('.js-cursor');
 
 
+    Earth.position.set(100, 100, 100);
     Scene.init(Earth);
 
     controller.on('frame', function (frame) {
@@ -46,11 +48,20 @@ define([
             //    left: window.innerWidth / 2 + position[0]
             //});
 
-            var crossProduct = Leap.vec3.create();
+/*            var crossProduct = Leap.vec3.create();
             var direction = hand.direction;
             var normal = hand.palmNormal;
 
-            Leap.vec3.cross(crossProduct, direction, normal);
+            Leap.vec3.cross(crossProduct, direction, normal);*/
+
+
+
+            var hands = frame.hands,
+                palmPosition = hand.palmPosition;
+            hands.forEach(function (hand, index) {
+                //hand.hold(Earth);
+                Earth.position.set(palmPosition[0], palmPosition[1], palmPosition[2]);
+            });
         }
 
         //Screen tap custom gesture
@@ -59,6 +70,7 @@ define([
     });
 
     controller.use('riggedHand');
+    controller.use('handHold');
     controller.connect();
 
 });
