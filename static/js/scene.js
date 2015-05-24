@@ -4,8 +4,13 @@ define([
     'use strict';
 
     return {
-        CAMERA_POSITION: 500,
+        CAMERA_POSITION: 160,
         AMBIENT_LIGHT_COLOR: 0xededed,
+        scene: null,
+        camera: null,
+        group: null,
+        light: null,
+        renderer: null,
 
         onWindowResize: function (camera, renderer) {
             camera.aspect = window.innerWidth / window.innerHeight;
@@ -26,30 +31,38 @@ define([
             renderer.render(scene, camera);
         },
 
-        init: function (obj) {
+        init: function (objList) {
             var self = this,
                 container = document.getElementById('container'),
-                aspect = window.innerWidth / window.innerHeight,
-                camera = new THREE.PerspectiveCamera(60, aspect, 1, 2000),
-                scene = new THREE.Scene(),
-                group = new THREE.Group(),
-                light = new THREE.AmbientLight(self.AMBIENT_LIGHT_COLOR),
-                renderer = new THREE.WebGLRenderer({
-                    alpha: true,
-                    antialias: true
-                });
+                aspect = window.innerWidth / window.innerHeight;
 
-            camera.position.z = self.CAMERA_POSITION;
-            group.add(obj);
-            scene.add(group);
-            scene.add(light);
-            renderer.setClearColor(0xffffff);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-            window.addEventListener('resize', self.onWindowResize.bind(self, camera, renderer), false);
-            self.animate(camera, scene, group, renderer);
+            self.camera = new THREE.PerspectiveCamera(45, aspect, 0.01, 1000),
+            self.scene = new THREE.Scene(),
+            self.group = new THREE.Group(),
+            self.light = new THREE.AmbientLight(self.AMBIENT_LIGHT_COLOR),
+            self.renderer = new THREE.WebGLRenderer({
+                alpha: true,
+                antialias: true
+            });
+
+            self.camera.position.z = self.CAMERA_POSITION;
+            objList.forEach(function (obj) {
+                self.group.add(obj);
+            });
+            self.scene.add(self.group);
+            self.scene.add(self.light);
+            self.renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(self.renderer.domElement);
+            window.addEventListener('resize', self.onWindowResize.bind(self, self.camera, self.renderer), false);
+            self.animate(self.camera, self.scene, self.group, self.renderer);
 
             return self;
+        },
+
+        add: function (obj) {
+            if (this.scene) {
+                this.scene.add(obj);
+            }
         }
     }
 });

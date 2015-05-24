@@ -3,8 +3,9 @@ define([
     'riggedHand',
     'handHold',
     './scene.js',
+    './space.js',
     './earth.js'
-], function (Leap, RiggedHand, handHold, Scene, Earth) {
+], function (Leap, RiggedHand, handHold, Scene, Space, Earth) {
     'use strict';
 
     var controllerOptions = {
@@ -15,8 +16,9 @@ define([
         $cursor = $('.js-cursor');
 
 
-    Earth.position.set(100, 100, 100);
-    Scene.init(Earth);
+    // Earth.position.set(100, 100, 100);
+    Scene.init([Earth]);
+    Scene.add(Space);
 
     controller.on('frame', function (frame) {
         if (frame.valid && frame.gestures.length > 0) {
@@ -58,10 +60,32 @@ define([
 
             var hands = frame.hands,
                 palmPosition = hand.palmPosition;
-            hands.forEach(function (hand, index) {
-                //hand.hold(Earth);
-                Earth.position.set(palmPosition[0], palmPosition[1], palmPosition[2]);
-            });
+
+            // Scale
+            if (hands.length == 2) {
+                var stabilizedLeft = hands[0].stabilizedPalmPosition,
+                    stabilizedRight = hands[1].stabilizedPalmPosition;
+
+                var delta = (stabilizedLeft[0] - stabilizedRight[0])/100;
+                delta = delta.toFixed(2);
+                delta = Math.abs(parseFloat(delta));
+//console.log('delta ', delta);
+                Earth.scale.set(delta, delta, delta);
+            } else if (hands.length == 1){
+                Earth.position.setX(hands[0].palmPosition[0]/2);
+                Earth.position.setY(hands[0].palmPosition[1]/2);
+
+                console.log('X',  hands[0].palmPosition[1]);
+                var d1 = hands[0].indexFinger.proximal.direction(),
+                    d2 = hands[0].thumb.proximal.direction();
+
+                var angle = Math.acos(Leap.vec3.dot(d1, d2));
+                angle = (angle * 180 / Math.PI).toPrecision(2);
+
+                if (angle >= 60) {
+                    console.log('angle', angle);
+                }
+            }
         }
 
         //Screen tap custom gesture

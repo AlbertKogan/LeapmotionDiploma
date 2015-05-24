@@ -14,7 +14,7 @@ define(['three'], function (THREE) {
         };
 
     //surface.minFilter = THREE.NearestFilter;
-    var earthGeometry = new THREE.SphereGeometry(200, 20, 20),
+    var earthGeometry = new THREE.SphereGeometry(20, 64, 64),
         earthMaterial = new THREE.MeshPhongMaterial(materialOptions);
 
     return new THREE.Mesh(earthGeometry, earthMaterial);
