@@ -36,10 +36,10 @@ define([
                 container = document.getElementById('container'),
                 aspect = window.innerWidth / window.innerHeight;
 
-            self.camera = new THREE.PerspectiveCamera(45, aspect, 0.01, 1000),
-            self.scene = new THREE.Scene(),
-            self.group = new THREE.Group(),
-            self.light = new THREE.AmbientLight(self.AMBIENT_LIGHT_COLOR),
+            self.camera = new THREE.PerspectiveCamera(45, aspect, 0.01, 1000);
+            self.scene = new THREE.Scene();
+            self.group = new THREE.Group();
+            self.light = new THREE.AmbientLight(self.AMBIENT_LIGHT_COLOR);
             self.renderer = new THREE.WebGLRenderer({
                 alpha: true,
                 antialias: true

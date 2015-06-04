@@ -1,12 +1,86 @@
-.content {
-    background-color: #bfbfbf;
+@import 'reset';
+
+@keyframes buttonShow {
+    0% {
+        -webkit-transform: scale(0.5);
+        -moz-transform: scale(0.5);
+        -ms-transform: scale(0.5);
+        -o-transform: scale(0.5);
+        transform: scale(0.5);
+        opacity: 0.1;
+    }
+    60% {
+        -webkit-transform: scale(1.2);
+        -moz-transform: scale(1.2);
+        -ms-transform: scale(1.2);
+        -o-transform: scale(1.2);
+        transform: scale(1.2);
+        opacity: 0.9;
+    }
+    100% {
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        -o-transform: scale(1);
+        transform: scale(1);
+        opacity: 0.1;
+    }
 }
 
+@keyframes shadow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1);
+    }
+    40% {
+        box-shadow: 0 0 0 12px rgba(48, 216, 178, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1);
+    }
+}
+
+@mixin transform-center() {
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.content {
+    background-color: #bfbfbf;
+    margin: 0;
+    position: relative;
+}
+
+
 .cursor {
-    display: inline-block;
+    display: block;
     position: absolute;
     content: ' ';
-    width: 5px;
-    height: 5px;
-    background-color: grey;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00ca58;
+    opacity: 0.8;
+    box-sizing: content-box;
+    animation: shadow 3s infinite ease-in-out;
+
+    &-outer {
+        background-color: transparent;
+        border: 1px solid #00ca58;
+        padding: 10px;
+        animation: buttonShow 2s infinite ease-in-out;
+        top: -11px;
+        left: -11px;
+    }
+
+    &-wrapper {
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        position: absolute;
+        content: ' ';
+    }
 }

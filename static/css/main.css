@@ -1,10 +1,95 @@
+/** * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/) * http://cssreset.com */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+@keyframes buttonShow {
+  0% {
+    -webkit-transform: scale(0.5);
+    -moz-transform: scale(0.5);
+    -ms-transform: scale(0.5);
+    -o-transform: scale(0.5);
+    transform: scale(0.5);
+    opacity: 0.1; }
+
+  60% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+    opacity: 0.9; }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    opacity: 0.1; } }
+
+@keyframes shadow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1); }
+
+  40% {
+    box-shadow: 0 0 0 12px rgba(48, 216, 178, 0.5); }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1); } }
+
 .content {
-  background-color: #bfbfbf; }
+  background-color: #bfbfbf;
+  margin: 0;
+  position: relative; }
 
 .cursor {
-  display: inline-block;
+  display: block;
   position: absolute;
   content: ' ';
-  width: 5px;
-  height: 5px;
-  background-color: grey; }
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00ca58;
+  opacity: 0.8;
+  box-sizing: content-box;
+  animation: shadow 3s infinite ease-in-out; }
+  .cursor-outer {
+    background-color: transparent;
+    border: 1px solid #00ca58;
+    padding: 10px;
+    animation: buttonShow 2s infinite ease-in-out;
+    top: -11px;
+    left: -11px; }
+  .cursor-wrapper {
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    content: ' '; }

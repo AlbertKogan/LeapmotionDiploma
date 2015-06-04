@@ -13,7 +13,6 @@ define(['three'], function (THREE) {
             specular: new THREE.Color('grey')
         };
 
-    //surface.minFilter = THREE.NearestFilter;
     var earthGeometry = new THREE.SphereGeometry(20, 64, 64),
         earthMaterial = new THREE.MeshPhongMaterial(materialOptions);
 
