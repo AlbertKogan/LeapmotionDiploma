@@ -63,6 +63,9 @@ table {
   100% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1); } }
 
+html {
+  font-family: Helvetica, Arial, sans-serif; }
+
 .content {
   background-color: #bfbfbf;
   margin: 0;
@@ -93,3 +96,28 @@ table {
     transform: translate(-50%, -50%);
     position: absolute;
     content: ' '; }
+
+.message-wrapper, .navigation-wrapper {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  border: 1px solid #717171; }
+
+.navigation-wrapper {
+  right: 100px;
+  top: 300px;
+  left: auto; }
+.navigation-link {
+  text-decoration: none;
+  color: #05776A; }
+  .navigation-link:hover {
+    text-decoration: underline; }
+
+.is-current-mode {
+  font-weight: bold; }
+
+.is-hidden {
+  display: none; }

@@ -46,6 +46,9 @@
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+html {
+    font-family: Helvetica, Arial, sans-serif;
+}
 
 .content {
     background-color: #bfbfbf;
@@ -83,4 +86,42 @@
         position: absolute;
         content: ' ';
     }
+}
+
+.message {
+    &-wrapper {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 0.5rem;
+        background-color: rgba(white, 0.8);
+        border-radius: 2px;
+        border: 1px solid rgb(113, 113, 113)
+    }
+}
+
+.navigation {
+    &-wrapper {
+        @extend .message-wrapper;
+
+        right: 100px;
+        top: 300px;
+        left: auto;
+    }
+    
+    &-link {
+        text-decoration: none;
+        color: #05776A;
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+.is-current-mode {
+    font-weight: bold;
+}
+
+.is-hidden {
+    display: none;
 }

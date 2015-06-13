@@ -8,6 +8,14 @@ define([
 ], function (Leap, RiggedHand, handHold, Scene, Space, Earth) {
     'use strict';
 
+    var MODES = {
+        ui: 'UI mode',
+        camera: 'camera mode'
+    };
+
+    var $content = $('.js-content'),
+        $currentMode = $('.is-current-mode');
+
     var controllerOptions = {
             enableGestures: true,
             frameEventName: 'animationFrame'
@@ -32,22 +40,80 @@ define([
         return Leap.vec3.fromValues(x, y, z);
     }
 
+    function isHover ($el, $cursor) {
+        var targetPosition = $el.get(0).getBoundingClientRect(),
+            cursorPosition = $cursor.get(0).getBoundingClientRect();
+
+        return targetPosition.top < cursorPosition.top &&
+                targetPosition.right > cursorPosition.right &&
+                targetPosition.bottom > cursorPosition.bottom &&
+                targetPosition.left < cursorPosition.left;
+    }
+
+    function scale (hands, Earth) {
+        var stabilizedLeft = hands[0].stabilizedPalmPosition,
+            stabilizedRight = hands[1].stabilizedPalmPosition,
+            delta = (stabilizedLeft[0] - stabilizedRight[0])/100;
+
+        hands.forEach(function (hand) {
+            var handMesh = hand.data('riggedHand.mesh');
+
+            handMesh.material.opacity = 0.7;
+        });
+
+        delta = delta.toFixed(2);
+        delta = Math.abs(parseFloat(delta));
+        Earth.scale.set(delta, delta, delta);
+    }
+
+    function moveCamera (Scene, normalizedHandPosition, $cursor) {
+        $cursor.addClass('is-hidden');
+        Scene.camera.position.x = normalizedHandPosition[0];
+        Scene.camera.position.y = normalizedHandPosition[1];
+        Scene.camera.position.z = normalizedHandPosition[2];
+    }
+
+    function moveCursor (normalizedPoint, frameHeight, frameWidth, $cursor) {
+        $cursor.removeClass('is-hidden');
+        $cursor.offset({
+            top: (1 - normalizedPoint[1]) * frameHeight,
+            left: normalizedPoint[0] * frameWidth
+        });
+
+        return false;
+    }
+
     controller.use('riggedHand', {
             materialOptions: {
-                opacity: 0
+                opacity: 1
             }
         }).use('handHold')
         .on('frame', function (frame) {
-            if (frame.valid && frame.gestures.length > 0) {
+            if (frame.valid && frame.gestures.length && frame.hands.length) {
+                var handMesh = frame.hands[0].data('riggedHand.mesh');
                 frame.gestures.forEach(function (gesture) {
-                    if (gesture.type == 'keyTap') {
+                    switch (gesture.type) {
+                        case "keyTap":
+                            if (!isHover($('.js-link'), $cursor)) {
+                                $content.toggleClass('js-hover');
 
+                                if ($content.hasClass('js-hover')) {
+                                    $currentMode.html(MODES.ui);
+                                    handMesh.material.opacity = 0;
+                                } else {
+                                    $currentMode.html(MODES.camera);
+                                    handMesh.material.opacity = 1;
+                                }
+                            } else {
+                                console.log('hover and click');
+                            }
+                            console.log("Key Tap Gesture");
+                            break;
                     }
                 });
             }
 
             if (frame.valid && frame.hands.length) {
-                console.log(frame);
                 var hands = frame.hands,
                     frameHeight = window.innerHeight,
                     frameWidth = window.innerWidth,
@@ -57,51 +123,18 @@ define([
                     normalizedPoint = iBox.normalizePoint(leapPoint, true),
                     normalizedHandPosition = normilizedPosition(leapPoint, iBox);
 
-                //hands.forEach(function (hand) {
-                //    var handMesh = hand.data('riggedHand.mesh');
-                //
-                //    handMesh.material.opacity = 0;
-                //});
-
                 // Scale
                 if (hands.length == 2) {
-                    var stabilizedLeft = hands[0].stabilizedPalmPosition,
-                        stabilizedRight = hands[1].stabilizedPalmPosition,
-                        delta = (stabilizedLeft[0] - stabilizedRight[0])/100;
-
-                    hands.forEach(function (hand) {
-                        var handMesh = hand.data('riggedHand.mesh');
-
-                        handMesh.material.opacity = 0.7;
-                    });
-
-                    delta = delta.toFixed(2);
-                    delta = Math.abs(parseFloat(delta));
-                    Earth.scale.set(delta, delta, delta);
+                    scale(hands, Earth);
                 } else if (hands.length == 1) {
-
-                    if (hands[0].fingers[1].extended) {
-                        $cursor.offset({
-                            top: (1 - normalizedPoint[1]) * frameHeight,
-                            left: normalizedPoint[0] * frameWidth
-                        });
-
-                        return false;
+                    if (hands[0].fingers[1].extended && $content.hasClass('js-hover')) {
+                        moveCursor(normalizedPoint, frameHeight, frameWidth, $cursor);
+                    } else if (!$content.hasClass('js-hover')) {
+                        moveCamera(Scene, normalizedHandPosition, $cursor);
                     }
-
-                    //var d1 = hands[0].indexFinger.proximal.direction(),
-                    //    d2 = hands[0].thumb.proximal.direction(),
-                    //    angle = Math.acos(Leap.vec3.dot(d1, d2));
-                    //
-                    //angle = (angle * 180 / Math.PI).toPrecision(2);
-
-                    //Scene.camera.position.x = normalizedHandPosition[0];
-                    //Scene.camera.position.y = normalizedHandPosition[1];
-                    //Scene.camera.position.z = normalizedHandPosition[2];
                 }
             }
         });
 
     controller.connect();
-
 });
