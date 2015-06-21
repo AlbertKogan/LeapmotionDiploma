@@ -65,9 +65,10 @@ html {
     height: 8px;
     border-radius: 50%;
     background-color: #00ca58;
-    opacity: 0.8;
+    //opacity: 0.8;
     box-sizing: content-box;
     animation: shadow 3s infinite ease-in-out;
+    z-index: 200;
 
     &-outer {
         background-color: transparent;
@@ -76,6 +77,7 @@ html {
         animation: buttonShow 2s infinite ease-in-out;
         top: -11px;
         left: -11px;
+        z-index: 200;
     }
 
     &-wrapper {
@@ -85,6 +87,7 @@ html {
         transform: translate(-50%, -50%);
         position: absolute;
         content: ' ';
+        z-index: 200;
     }
 }
 
@@ -100,6 +103,15 @@ html {
     }
 }
 
+.info-wrapper {
+    @extend .message-wrapper;
+
+    top: 100px;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+
 .navigation {
     &-wrapper {
         @extend .message-wrapper;
@@ -107,12 +119,10 @@ html {
         right: 100px;
         top: 300px;
         left: auto;
-    }
-    
-    &-link {
-        text-decoration: none;
-        color: #05776A;
-        
+        cursor: pointer;
+        z-index: 100;
+        padding: 1rem;
+
         &:hover {
             text-decoration: underline;
         }
@@ -123,5 +133,21 @@ html {
 }
 
 .is-hidden {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.is-menu-hover {
+    color: #ffffff;
+    background-color: rgba( #3c3c3c, 0.8);
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+li {
+    margin-bottom: 0.4rem;
 }
