@@ -14,7 +14,9 @@ define([
     };
 
     var $content = $('.js-content'),
-        $currentMode = $('.is-current-mode');
+        $currentMode = $('.is-current-mode'),
+        $jsInfo = $('.js-info'),
+        $menuLink = $('.js-link');
 
     var controllerOptions = {
             enableGestures: true,
@@ -25,6 +27,10 @@ define([
 
     Scene.init([Earth]);
     Scene.add(Space);
+
+    $menuLink.on('click', function (e) {
+        $jsInfo.toggleClass('is-hidden');
+    });
 
     // Try to improve cursor location
     function normilizedPosition (leapPoint, iBox) {
@@ -91,10 +97,11 @@ define([
         .on('frame', function (frame) {
             if (frame.valid && frame.gestures.length && frame.hands.length) {
                 var handMesh = frame.hands[0].data('riggedHand.mesh');
+
                 frame.gestures.forEach(function (gesture) {
                     switch (gesture.type) {
                         case "keyTap":
-                            if (!isHover($('.js-link'), $cursor)) {
+                            if (!isHover($menuLink, $cursor)) {
                                 $content.toggleClass('js-hover');
 
                                 if ($content.hasClass('js-hover')) {
@@ -105,7 +112,7 @@ define([
                                     handMesh.material.opacity = 1;
                                 }
                             } else {
-                                console.log('hover and click');
+                                $jsInfo.toggleClass('is-hidden');
                             }
                             console.log("Key Tap Gesture");
                             break;
@@ -129,6 +136,7 @@ define([
                 } else if (hands.length == 1) {
                     if (hands[0].fingers[1].extended && $content.hasClass('js-hover')) {
                         moveCursor(normalizedPoint, frameHeight, frameWidth, $cursor);
+                        $menuLink.toggleClass('is-menu-hover', isHover($menuLink, $cursor));
                     } else if (!$content.hasClass('js-hover')) {
                         moveCamera(Scene, normalizedHandPosition, $cursor);
                     }
